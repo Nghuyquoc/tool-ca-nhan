@@ -144,17 +144,17 @@ export const CommandPalette: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="flex items-center px-4 py-3.5 border-b border-border bg-secondary/30">
-          <Search className="w-5 h-5 text-muted-foreground mr-3" />
+        <div className="flex items-center px-4 py-3.5 border-b border-border bg-secondary/80">
+          <Search className="w-5 h-5 text-primary mr-3 shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Tìm kiếm ghi chú, công việc, tin tức hoặc lệnh nhanh..."
-            className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-base"
+            className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-sm sm:text-base font-medium"
           />
-          <kbd className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-secondary text-muted-foreground border border-border">
+          <kbd className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-mono font-bold bg-card text-foreground border border-border shadow-sm">
             ESC
           </kbd>
         </div>

@@ -201,25 +201,25 @@ export const AppLayout: React.FC = () => {
           <div className="flex items-center space-x-3 flex-1 max-w-xl">
             <button
               onClick={() => setCommandPaletteOpen(true)}
-              className="flex items-center space-x-3 w-full max-w-md py-2 px-3.5 rounded-2xl bg-secondary/60 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/60 text-xs sm:text-sm transition text-left"
+              className="flex items-center space-x-3 w-full max-w-md py-2 px-3.5 rounded-2xl bg-secondary/80 hover:bg-secondary text-foreground hover:text-foreground border border-border text-xs sm:text-sm font-medium transition text-left shadow-sm"
             >
-              <Search className="w-4 h-4 shrink-0" />
-              <span className="flex-1 truncate">Tìm kiếm mọi thứ (Ghi chú, Task, Tin tức)...</span>
-              <kbd className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-card border border-border text-muted-foreground">
+              <Search className="w-4 h-4 shrink-0 text-primary" />
+              <span className="flex-1 truncate text-muted-foreground font-normal">Tìm kiếm mọi thứ (Ghi chú, Task, Tin tức)...</span>
+              <kbd className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold bg-card border border-border text-foreground shadow-xs">
                 Ctrl K
               </kbd>
             </button>
           </div>
 
           {/* Right Action Icons */}
-          <div className="flex items-center space-x-1 sm:space-x-2">
+          <div className="flex items-center space-x-1.5 sm:space-x-2">
             {/* Quick Add Dropdown */}
             <button
               onClick={() => {
                 handleRequestNotification();
                 openQuickCreateWithTab('task');
               }}
-              className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition"
+              className="hidden sm:flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-500/20 active:scale-95 transition"
             >
               <Plus className="w-4 h-4" />
               <span>Thêm mới</span>
