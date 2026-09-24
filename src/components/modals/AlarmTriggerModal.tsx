@@ -27,17 +27,17 @@ export const AlarmTriggerModal: React.FC = () => {
     : null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-lg overflow-hidden bg-card border border-red-500/30 rounded-3xl p-8 text-center shadow-2xl shadow-red-500/10 transition-card">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div className="relative w-full max-w-lg overflow-hidden bg-card border-2 border-red-500/50 dark:border-red-500/40 rounded-3xl p-8 text-center shadow-2xl shadow-red-500/20 ring-1 ring-white/10 transition-card">
         {/* Glow ambient background */}
-        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-red-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-64 bg-red-500/25 rounded-full blur-3xl pointer-events-none" />
 
         {/* Pulsing Alarm Icon */}
-        <div className="relative mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-red-500/10 text-red-500 border border-red-500/20 animate-ring-alarm">
-          <Bell className="h-12 w-12" />
+        <div className="relative mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-red-500/15 text-red-500 border border-red-500/40 animate-ring-alarm shadow-lg shadow-red-500/20">
+          <Bell className="h-12 w-12 text-red-500" />
           <span className="absolute -top-1 -right-1 flex h-5 w-5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500"></span>
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 shadow-sm"></span>
           </span>
         </div>
 

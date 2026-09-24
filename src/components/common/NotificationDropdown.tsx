@@ -88,13 +88,13 @@ export const NotificationDropdown: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-card border border-border shadow-2xl z-50 overflow-hidden animate-scaleIn">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-card border-2 border-slate-700/80 dark:border-slate-600/80 shadow-2xl ring-1 ring-white/10 z-50 overflow-hidden animate-scaleIn backdrop-blur-2xl">
           {/* Header */}
-          <div className="p-4 border-b border-border bg-secondary/30 flex items-center justify-between">
+          <div className="p-4 border-b border-border bg-secondary/60 flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <h3 className="font-bold text-sm text-foreground">Trung tâm thông báo</h3>
               {unreadCount > 0 && (
-                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-500/10 text-red-500">
+                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white shadow-xs">
                   {unreadCount} mới
                 </span>
               )}
@@ -102,7 +102,7 @@ export const NotificationDropdown: React.FC = () => {
             {notifications.length > 0 && (
               <button
                 onClick={markAllNotificationsAsRead}
-                className="text-xs text-primary hover:underline flex items-center space-x-1 font-medium"
+                className="text-xs text-primary hover:underline flex items-center space-x-1 font-semibold"
               >
                 <Check className="w-3.5 h-3.5" />
                 <span>Đọc tất cả</span>

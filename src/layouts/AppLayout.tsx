@@ -25,6 +25,7 @@ import { useWorkspaceStore } from '../stores/useWorkspaceStore';
 import { CommandPalette } from '../components/modals/CommandPalette';
 import { QuickCreateModal } from '../components/modals/QuickCreateModal';
 import { AlarmTriggerModal } from '../components/modals/AlarmTriggerModal';
+import { AuthModal } from '../components/modals/AuthModal';
 import { ToastContainer } from '../components/common/ToastContainer';
 import { NotificationDropdown } from '../components/common/NotificationDropdown';
 
@@ -43,6 +44,8 @@ export const AppLayout: React.FC = () => {
     checkTriggers,
     alarms,
     tasks,
+    user,
+    setAuthModalOpen,
   } = useWorkspaceStore();
 
   // Realtime Alarm Engine interval ticker
@@ -237,15 +240,35 @@ export const AppLayout: React.FC = () => {
               {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
             </button>
 
-            {/* User Profile Avatar */}
-            <div
-              onClick={() => navigate('/settings')}
-              className="flex items-center space-x-2 p-1.5 rounded-xl hover:bg-secondary cursor-pointer transition ml-1"
-            >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-bold flex items-center justify-center text-xs shadow-sm">
-                HQ
-              </div>
-            </div>
+            {/* User Profile Avatar / Login Button */}
+            {user?.isLoggedIn ? (
+              <button
+                onClick={() => setAuthModalOpen(true)}
+                className="flex items-center space-x-2.5 px-2.5 py-1.5 rounded-2xl bg-secondary/80 hover:bg-secondary border border-border/80 transition active:scale-95 ml-1 group"
+                title="Quản lý tài khoản cá nhân"
+              >
+                <div className="relative">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white font-bold flex items-center justify-center text-xs shadow-md shadow-blue-500/20">
+                    {user.avatar || user.name.slice(0, 2).toUpperCase()}
+                  </div>
+                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-background rounded-full"></span>
+                </div>
+                <div className="hidden lg:flex flex-col text-left">
+                  <span className="text-xs font-bold text-foreground leading-tight truncate max-w-[100px]">
+                    {user.name}
+                  </span>
+                  <span className="text-[10px] text-emerald-500 font-semibold leading-tight">Đã đăng nhập</span>
+                </div>
+              </button>
+            ) : (
+              <button
+                onClick={() => setAuthModalOpen(true)}
+                className="flex items-center space-x-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-500/20 active:scale-95 transition ml-1"
+                title="Đăng nhập / Đăng ký"
+              >
+                <span>Đăng nhập</span>
+              </button>
+            )}
           </div>
         </header>
 
@@ -322,6 +345,7 @@ export const AppLayout: React.FC = () => {
       <CommandPalette />
       <QuickCreateModal />
       <AlarmTriggerModal />
+      <AuthModal />
       <ToastContainer />
     </div>
   );

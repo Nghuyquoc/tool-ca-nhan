@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Note, NoteFolder, TaskItem, Alarm, NewsArticle, AppNotification, UserSettings, DashboardWidgetConfig, TaskStatus, PriorityLevel, RepeatType, AlarmSound } from '../types';
+import { Note, NoteFolder, TaskItem, Alarm, NewsArticle, AppNotification, UserSettings, DashboardWidgetConfig, TaskStatus, PriorityLevel, RepeatType, AlarmSound, UserProfile } from '../types';
 import { initialFolders, initialNotes, initialTasks, initialAlarms, initialNews, initialNotifications, initialWidgets, initialSettings } from '../mock/initialData';
 import { playAlarmLoop, stopAlarmSound, playNotificationSound, playCompletionSound } from '../utils/sound';
 
@@ -111,6 +111,14 @@ interface WorkspaceState {
   addToast: (message: string, type?: 'success' | 'info' | 'warning' | 'error') => void;
   removeToast: (id: string) => void;
 
+  // User Authentication
+  user: UserProfile | null;
+  authModalOpen: boolean;
+  setAuthModalOpen: (open: boolean) => void;
+  login: (email: string, name?: string) => void;
+  register: (name: string, email: string) => void;
+  logout: () => void;
+
   // Global search
   globalSearchQuery: string;
   setGlobalSearchQuery: (query: string) => void;
@@ -145,6 +153,7 @@ function saveState(state: Partial<WorkspaceState>) {
       widgets: state.widgets,
       settings: state.settings,
       theme: state.theme,
+      user: state.user,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
   } catch (e) {
@@ -155,6 +164,50 @@ function saveState(state: Partial<WorkspaceState>) {
 const stored = loadStoredState();
 
 export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
+  // User Profile
+  user: stored?.user || {
+    id: 'user-default',
+    name: 'Huy Quốc',
+    email: 'huyquoc2xx4@gmail.com',
+    isLoggedIn: true,
+    createdAt: new Date().toISOString(),
+  },
+  authModalOpen: false,
+  setAuthModalOpen: (open) => set({ authModalOpen: open }),
+  login: (email, name) => {
+    const userName = name || email.split('@')[0] || 'User';
+    const profile: UserProfile = {
+      id: `user-${Date.now()}`,
+      name: userName,
+      email,
+      isLoggedIn: true,
+      createdAt: new Date().toISOString(),
+    };
+    set({ user: profile, authModalOpen: false });
+    get().addToast(`Chào mừng ${userName} đã đăng nhập! 🎉`, 'success');
+    saveState(get());
+  },
+  register: (name, email) => {
+    const profile: UserProfile = {
+      id: `user-${Date.now()}`,
+      name,
+      email,
+      isLoggedIn: true,
+      createdAt: new Date().toISOString(),
+    };
+    set({ user: profile, authModalOpen: false });
+    get().addToast(`Đăng ký tài khoản ${name} thành công! 🎉`, 'success');
+    saveState(get());
+  },
+  logout: () => {
+    set({
+      user: null,
+      authModalOpen: false,
+    });
+    get().addToast('Đã đăng xuất tài khoản', 'info');
+    saveState(get());
+  },
+
   // Theme & Layout
   theme: stored?.theme || 'dark',
   setTheme: (theme) => {

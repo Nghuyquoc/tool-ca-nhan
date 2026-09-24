@@ -139,3 +139,12 @@ export interface DashboardWidgetConfig {
   isEnabled: boolean;
   order: number;
 }
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  isLoggedIn: boolean;
+  createdAt: string;
+}

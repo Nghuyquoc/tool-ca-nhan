@@ -592,18 +592,18 @@ export const DashboardPage: React.FC = () => {
       {/* 3. CUSTOMIZE WIDGETS MODAL */}
       {customizeModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn"
           onClick={() => setCustomizeModalOpen(false)}
         >
           <div
-            className="w-full max-w-md bg-card border border-border rounded-3xl shadow-2xl p-6 overflow-hidden animate-scaleIn"
+            className="w-full max-w-md bg-card border-2 border-slate-700/80 dark:border-slate-600/80 rounded-3xl shadow-2xl ring-1 ring-white/10 p-6 overflow-hidden animate-scaleIn"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-4 border-b border-border mb-4">
               <h3 className="font-bold text-base text-foreground">Tùy biến Dashboard Widgets</h3>
               <button
                 onClick={() => setCustomizeModalOpen(false)}
-                className="text-xs text-muted-foreground hover:text-foreground font-semibold"
+                className="text-xs px-2.5 py-1 rounded-lg bg-secondary text-foreground hover:bg-secondary/80 font-bold"
               >
                 Đóng
               </button>
@@ -613,9 +613,9 @@ export const DashboardPage: React.FC = () => {
               {widgets.map((widget: DashboardWidgetConfig) => (
                 <div
                   key={widget.id}
-                  className="flex items-center justify-between p-3 rounded-2xl bg-secondary/40 border border-border"
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-secondary/70 border border-border"
                 >
-                  <span className="text-sm font-medium text-foreground">{widget.titleVi}</span>
+                  <span className="text-sm font-semibold text-foreground">{widget.titleVi}</span>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
                       type="checkbox"
@@ -623,7 +623,7 @@ export const DashboardPage: React.FC = () => {
                       onChange={() => toggleWidget(widget.id)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    <div className="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
               ))}
@@ -631,7 +631,7 @@ export const DashboardPage: React.FC = () => {
 
             <button
               onClick={() => setCustomizeModalOpen(false)}
-              className="mt-6 w-full py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition"
+              className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-blue-500/25 active:scale-95 transition"
             >
               Lưu cấu hình
             </button>
