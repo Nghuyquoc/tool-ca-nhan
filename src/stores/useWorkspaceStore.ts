@@ -431,8 +431,74 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
       playCompletionSound();
     }
 
-    set((state) => ({
-      tasks: state.tasks.map((t) =>
+    // Check if task is recurring
+    let nextRecurringTask: TaskItem | null = null;
+    if (isNowCompleted && current.isRecurring && current.recurringRule && current.recurringRule.type !== 'none') {
+      const { type, customDays } = current.recurringRule;
+      const baseDate = current.dueDate ? new Date(current.dueDate) : new Date();
+      const nextDate = new Date(baseDate);
+
+      if (type === 'daily') {
+        nextDate.setDate(nextDate.getDate() + 1);
+      } else if (type === 'weekdays') {
+        do {
+          nextDate.setDate(nextDate.getDate() + 1);
+        } while (nextDate.getDay() === 0 || nextDate.getDay() === 6);
+      } else if (type === 'weekend') {
+        do {
+          nextDate.setDate(nextDate.getDate() + 1);
+        } while (nextDate.getDay() !== 0 && nextDate.getDay() !== 6);
+      } else if (type === 'weekly') {
+        nextDate.setDate(nextDate.getDate() + 7);
+      } else if (type === 'custom' && customDays && customDays.length > 0) {
+        let count = 0;
+        do {
+          nextDate.setDate(nextDate.getDate() + 1);
+          count++;
+        } while (!customDays.includes(nextDate.getDay()) && count < 14);
+      } else {
+        nextDate.setDate(nextDate.getDate() + 1);
+      }
+
+      const nextDueDateStr = nextDate.toISOString().split('T')[0];
+
+      nextRecurringTask = {
+        ...current,
+        id: `task-${Date.now() + 1}`,
+        status: 'todo',
+        dueDate: nextDueDateStr,
+        createdAt: new Date().toISOString(),
+        completedAt: undefined,
+        linkedAlarmId: undefined,
+      };
+
+      // Also create linked alarm if recurring task has alarm
+      if (current.hasAlarm && current.dueTime) {
+        const nextAlarm: Alarm = {
+          id: `alarm-${Date.now() + 2}`,
+          title: current.title,
+          description: `Báo thức lặp lại: ${current.title}`,
+          time: current.dueTime,
+          date: nextDueDateStr,
+          isEnabled: true,
+          repeatType: current.recurringRule.type,
+          repeatDays: current.recurringRule.customDays || [],
+          sound: get().settings.defaultSound,
+          volume: get().settings.alarmVolume,
+          snoozeEnabled: true,
+          snoozeDuration: get().settings.defaultSnoozeMinutes,
+          vibrate: true,
+          linkedTaskId: nextRecurringTask.id,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        nextRecurringTask.linkedAlarmId = nextAlarm.id;
+        set((state) => ({ alarms: [nextAlarm, ...state.alarms] }));
+      }
+    }
+
+    set((state) => {
+      const updatedTasks = state.tasks.map((t) =>
         t.id === id
           ? {
               ...t,
@@ -440,17 +506,25 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
               completedAt: isNowCompleted ? new Date().toISOString() : undefined,
             }
           : t
-      ),
-    }));
+      );
+      if (nextRecurringTask) {
+        return { tasks: [nextRecurringTask, ...updatedTasks] };
+      }
+      return { tasks: updatedTasks };
+    });
 
-    // If completed and has linked alarm, disable alarm or prompt
+    // If completed and has linked alarm, disable alarm
     if (isNowCompleted && current.linkedAlarmId) {
       set((state) => ({
         alarms: state.alarms.map((a) => (a.id === current.linkedAlarmId ? { ...a, isEnabled: false } : a)),
       }));
     }
 
-    get().addToast(isNowCompleted ? 'Tuyệt vời! Đã hoàn thành công việc 🎉' : 'Đã mở lại công việc', 'success');
+    if (nextRecurringTask) {
+      get().addToast(`Đã hoàn thành! Tự động tạo lượt tiếp theo vào ngày ${nextRecurringTask.dueDate} 🔁`, 'success');
+    } else {
+      get().addToast(isNowCompleted ? 'Tuyệt vời! Đã hoàn thành công việc 🎉' : 'Đã mở lại công việc', 'success');
+    }
     saveState(get());
   },
 

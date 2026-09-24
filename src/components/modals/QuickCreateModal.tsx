@@ -36,6 +36,9 @@ export const QuickCreateModal: React.FC = () => {
   const [taskHasReminder, setTaskHasReminder] = useState(true);
   const [taskReminderMinutes, setTaskReminderMinutes] = useState(15);
   const [taskHasAlarm, setTaskHasAlarm] = useState(false);
+  const [taskIsRecurring, setTaskIsRecurring] = useState(false);
+  const [taskRepeatType, setTaskRepeatType] = useState<RepeatType>('daily');
+  const [taskRepeatDays, setTaskRepeatDays] = useState<number[]>([1, 2, 3, 4, 5]);
 
   // Alarm form state
   const [alarmTime, setAlarmTime] = useState('07:30');
@@ -117,6 +120,8 @@ export const QuickCreateModal: React.FC = () => {
       tags,
       reminderMinutesBefore: taskHasReminder ? taskReminderMinutes : undefined,
       hasAlarm: taskHasAlarm,
+      isRecurring: taskIsRecurring,
+      recurringRule: taskIsRecurring ? { type: taskRepeatType, customDays: taskRepeatDays } : undefined,
     });
 
     setTaskTitle('');
@@ -399,6 +404,46 @@ export const QuickCreateModal: React.FC = () => {
                       <span>Bật Báo thức tương ứng vào lúc {taskDueTime}</span>
                     </span>
                   </label>
+                </div>
+
+                <div className="pt-2 border-t border-border/50 space-y-2">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={taskIsRecurring}
+                        onChange={(e) => setTaskIsRecurring(e.target.checked)}
+                        className="rounded text-primary focus:ring-0"
+                      />
+                      <span className="font-semibold text-foreground flex items-center space-x-1">
+                        <span>Lặp lại công việc (Recurring Task) 🔁</span>
+                      </span>
+                    </label>
+                  </div>
+
+                  {taskIsRecurring && (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pt-1 text-xs">
+                      {[
+                        { id: 'daily', label: 'Hằng ngày' },
+                        { id: 'weekdays', label: 'T2 - T6' },
+                        { id: 'weekend', label: 'Cuối tuần' },
+                        { id: 'weekly', label: 'Hằng tuần' },
+                      ].map((r) => (
+                        <button
+                          type="button"
+                          key={r.id}
+                          onClick={() => setTaskRepeatType(r.id as RepeatType)}
+                          className={`py-1.5 px-2 rounded-xl font-medium transition-all duration-150 ${
+                            taskRepeatType === r.id
+                              ? 'bg-emerald-600 text-white font-bold shadow-sm'
+                              : 'bg-secondary/60 text-muted-foreground hover:bg-secondary hover:text-foreground'
+                          }`}
+                        >
+                          {r.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -10,7 +10,7 @@ import {
   Bell,
   Search,
 } from 'lucide-react';
-import { PriorityLevel, TaskStatus, TaskItem } from '../types';
+import { PriorityLevel, TaskStatus, TaskItem, RepeatType } from '../types';
 import confetti from 'canvas-confetti';
 
 export const TodoPage: React.FC = () => {
@@ -31,6 +31,7 @@ export const TodoPage: React.FC = () => {
   const [inlineTitle, setInlineTitle] = useState('');
   const [inlineDueTime, setInlineDueTime] = useState('18:00');
   const [inlinePriority, setInlinePriority] = useState<PriorityLevel>('medium');
+  const [inlineRepeatType, setInlineRepeatType] = useState<RepeatType>('none');
 
   const todayStr = new Date().toISOString().split('T')[0];
   const tomorrow = new Date();
@@ -86,9 +87,30 @@ export const TodoPage: React.FC = () => {
       category: taskCategoryFilter || 'Công việc',
       tags: [],
       hasAlarm: false,
+      isRecurring: inlineRepeatType !== 'none',
+      recurringRule: inlineRepeatType !== 'none' ? { type: inlineRepeatType } : undefined,
     });
 
     setInlineTitle('');
+    setInlineRepeatType('none');
+  };
+
+  const getRepeatLabel = (task: TaskItem) => {
+    if (!task.isRecurring || !task.recurringRule) return null;
+    switch (task.recurringRule.type) {
+      case 'daily':
+        return 'Hằng ngày';
+      case 'weekdays':
+        return 'T2 - T6';
+      case 'weekend':
+        return 'Cuối tuần';
+      case 'weekly':
+        return 'Hằng tuần';
+      case 'custom':
+        return 'Tùy chỉnh';
+      default:
+        return 'Lặp lại';
+    }
   };
 
   const handleToggle = (id: string, currentStatus: TaskStatus) => {
@@ -194,34 +216,52 @@ export const TodoPage: React.FC = () => {
       </div>
 
       {/* Inline Quick Add Task */}
-      <form onSubmit={handleQuickAdd} className="flex items-center gap-2 p-2 bg-card border border-border rounded-2xl shadow-sm">
+      <form onSubmit={handleQuickAdd} className="flex flex-wrap items-center gap-2 p-2 bg-card border border-border rounded-2xl shadow-sm">
         <input
           type="text"
-          placeholder="Thêm nhanh task (Ví dụ: Đọc sách 20 phút, Đi tập cầu)..."
+          placeholder="Thêm nhanh task (Ví dụ: Uống nước 2L, Đi tập gym)..."
           value={inlineTitle}
           onChange={(e) => setInlineTitle(e.target.value)}
-          className="flex-1 bg-transparent px-3 py-1.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+          className="flex-1 min-w-[200px] bg-transparent px-3 py-1.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
         <input
           type="time"
           value={inlineDueTime}
           onChange={(e) => setInlineDueTime(e.target.value)}
           className="bg-secondary/60 px-2 py-1.5 rounded-xl text-xs font-mono focus:outline-none border border-border"
+          title="Giờ thực hiện"
         />
         <select
           value={inlinePriority}
           onChange={(e) => setInlinePriority(e.target.value as PriorityLevel)}
           className="bg-secondary/60 px-2 py-1.5 rounded-xl text-xs focus:outline-none border border-border"
+          title="Độ ưu tiên"
         >
           <option value="low" className="bg-card">Thấp</option>
           <option value="medium" className="bg-card">Vừa</option>
           <option value="high" className="bg-card">Cao</option>
           <option value="urgent" className="bg-card">Gấp</option>
         </select>
+        <select
+          value={inlineRepeatType}
+          onChange={(e) => setInlineRepeatType(e.target.value as RepeatType)}
+          className={`px-2 py-1.5 rounded-xl text-xs focus:outline-none border transition ${
+            inlineRepeatType !== 'none'
+              ? 'bg-indigo-600/15 border-indigo-500/40 text-indigo-400 font-bold'
+              : 'bg-secondary/60 border-border text-muted-foreground'
+          }`}
+          title="Tần suất lặp lại"
+        >
+          <option value="none" className="bg-card">Không lặp</option>
+          <option value="daily" className="bg-card">🔁 Hằng ngày</option>
+          <option value="weekdays" className="bg-card">🔁 Thứ 2 - Thứ 6</option>
+          <option value="weekend" className="bg-card">🔁 Cuối tuần</option>
+          <option value="weekly" className="bg-card">🔁 Hằng tuần</option>
+        </select>
         <button
           type="submit"
           disabled={!inlineTitle.trim()}
-          className="px-4 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 disabled:opacity-40 transition shrink-0"
+          className="px-4 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 disabled:opacity-40 transition shrink-0 shadow-sm"
         >
           Thêm
         </button>
@@ -292,14 +332,14 @@ export const TodoPage: React.FC = () => {
                     )}
 
                     {task.isRecurring && (
-                      <span className="flex items-center space-x-1 text-indigo-400">
+                      <span className="flex items-center space-x-1 font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400">
                         <Repeat className="w-3.5 h-3.5" />
-                        <span>Lặp lại</span>
+                        <span>Lặp lại: {getRepeatLabel(task)}</span>
                       </span>
                     )}
 
                     {task.hasAlarm && (
-                      <span className="flex items-center space-x-1 text-red-400">
+                      <span className="flex items-center space-x-1 font-semibold px-2 py-0.5 rounded-full bg-red-500/10 text-red-400">
                         <Bell className="w-3.5 h-3.5" />
                         <span>Báo thức</span>
                       </span>
