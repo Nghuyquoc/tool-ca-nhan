@@ -33,24 +33,30 @@ export const SavedPage: React.FC = () => {
         <div className="flex items-center space-x-1.5 p-1 rounded-2xl bg-secondary/80 border border-border text-xs font-semibold">
           <button
             onClick={() => setFilter('all')}
-            className={`px-3 py-1.5 rounded-xl transition ${
-              filter === 'all' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+            className={`px-3.5 py-1.5 rounded-xl transition-all duration-150 ${
+              filter === 'all'
+                ? 'bg-amber-500 text-white font-bold shadow-md shadow-amber-500/20'
+                : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
             }`}
           >
             Tất cả ({favoriteNotes.length + savedNews.length})
           </button>
           <button
             onClick={() => setFilter('notes')}
-            className={`px-3 py-1.5 rounded-xl transition ${
-              filter === 'notes' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+            className={`px-3.5 py-1.5 rounded-xl transition-all duration-150 ${
+              filter === 'notes'
+                ? 'bg-blue-600 text-white font-bold shadow-md shadow-blue-600/20'
+                : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
             }`}
           >
             Ghi chú ({favoriteNotes.length})
           </button>
           <button
             onClick={() => setFilter('news')}
-            className={`px-3 py-1.5 rounded-xl transition ${
-              filter === 'news' ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+            className={`px-3.5 py-1.5 rounded-xl transition-all duration-150 ${
+              filter === 'news'
+                ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/20'
+                : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
             }`}
           >
             Tin tức ({savedNews.length})

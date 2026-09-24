@@ -169,10 +169,10 @@ export const TodoPage: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setTaskView(tab.id as any)}
-              className={`px-3 py-1.5 rounded-xl transition ${
+              className={`px-3.5 py-1.5 rounded-xl transition-all duration-150 ${
                 taskView === tab.id
-                  ? 'bg-card text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground font-bold shadow-md shadow-primary/25'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80'
               }`}
             >
               {tab.label}

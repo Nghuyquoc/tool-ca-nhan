@@ -125,10 +125,10 @@ export const NewsPage: React.FC = () => {
             <button
               key={cat}
               onClick={() => setNewsCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-xl whitespace-nowrap transition ${
+              className={`px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all duration-150 ${
                 newsCategory === cat
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground'
+                  ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/25 scale-[1.02]'
+                  : 'bg-secondary/60 text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
             >
               {cat}

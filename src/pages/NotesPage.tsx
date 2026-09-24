@@ -153,52 +153,70 @@ export const NotesPage: React.FC = () => {
         {/* Quick Views */}
         <div className="space-y-1 text-xs font-medium">
           <button
-            onClick={() => setNoteFilter('all')}
-            className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl transition ${
+            onClick={() => {
+              setNoteFilter('all');
+              setSelectedFolderId(null);
+              setSelectedTag(null);
+            }}
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 ${
               noteFilter === 'all' && !selectedFolderId && !selectedTag
-                ? 'bg-secondary text-foreground font-semibold'
-                : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground'
+                ? 'bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20'
+                : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
             }`}
           >
             <div className="flex items-center space-x-2">
-              <FileText className="w-4 h-4 text-primary" />
+              <FileText className={`w-4 h-4 ${noteFilter === 'all' && !selectedFolderId && !selectedTag ? 'text-primary-foreground' : 'text-primary'}`} />
               <span>Tất cả ghi chú</span>
             </div>
-            <span className="text-[10px] opacity-70">
+            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+              noteFilter === 'all' && !selectedFolderId && !selectedTag ? 'bg-white/20 text-white' : 'opacity-70'
+            }`}>
               {notes.filter((n: Note) => !n.isTrash).length}
             </span>
           </button>
 
           <button
-            onClick={() => setNoteFilter('favorites')}
-            className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl transition ${
+            onClick={() => {
+              setNoteFilter('favorites');
+              setSelectedFolderId(null);
+              setSelectedTag(null);
+            }}
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 ${
               noteFilter === 'favorites'
-                ? 'bg-secondary text-foreground font-semibold'
-                : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground'
+                ? 'bg-amber-500 text-white font-bold shadow-md shadow-amber-500/20'
+                : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
             }`}
           >
             <div className="flex items-center space-x-2">
-              <Star className="w-4 h-4 text-amber-400" />
+              <Star className={`w-4 h-4 ${noteFilter === 'favorites' ? 'text-white fill-white' : 'text-amber-400'}`} />
               <span>Yêu thích</span>
             </div>
-            <span className="text-[10px] opacity-70">
+            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+              noteFilter === 'favorites' ? 'bg-white/20 text-white' : 'opacity-70'
+            }`}>
               {notes.filter((n: Note) => n.isFavorite && !n.isTrash).length}
             </span>
           </button>
 
           <button
-            onClick={() => setNoteFilter('trash')}
-            className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl transition ${
+            onClick={() => {
+              setNoteFilter('trash');
+              setSelectedFolderId(null);
+              setSelectedTag(null);
+            }}
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 ${
               noteFilter === 'trash'
-                ? 'bg-secondary text-foreground font-semibold'
-                : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground'
+                ? 'bg-rose-500 text-white font-bold shadow-md shadow-rose-500/20'
+                : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
             }`}
           >
             <div className="flex items-center space-x-2">
-              <Trash2 className="w-4 h-4 text-red-400" />
+              <Trash2 className={`w-4 h-4 ${noteFilter === 'trash' ? 'text-white' : 'text-red-400'}`} />
               <span>Thùng rác</span>
             </div>
-            <span className="text-[10px] opacity-70">
+            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
+              noteFilter === 'trash' ? 'bg-white/20 text-white' : 'opacity-70'
+            }`}>
               {notes.filter((n: Note) => n.isTrash).length}
             </span>
           </button>
@@ -218,29 +236,37 @@ export const NotesPage: React.FC = () => {
               <FolderPlus className="w-3.5 h-3.5" />
             </button>
           </div>
-          <div className="space-y-0.5">
-            {folders.map((f: NoteFolder) => (
-              <button
-                key={f.id}
-                onClick={() => setSelectedFolderId(f.id)}
-                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs transition ${
-                  selectedFolderId === f.id
-                    ? 'bg-secondary text-foreground font-semibold'
-                    : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground'
-                }`}
-              >
-                <div className="flex items-center space-x-2 truncate">
-                  <Folder
-                    className="w-3.5 h-3.5 shrink-0"
-                    style={{ color: f.color || '#3b82f6' }}
-                  />
-                  <span className="truncate">{f.name}</span>
-                </div>
-                <span className="text-[10px] opacity-60">
-                  {notes.filter((n: Note) => n.folderId === f.id && !n.isTrash).length}
-                </span>
-              </button>
-            ))}
+          <div className="space-y-1">
+            {folders.map((f: NoteFolder) => {
+              const isSelected = selectedFolderId === f.id;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => {
+                    setSelectedFolderId(isSelected ? null : f.id);
+                    setNoteFilter('all');
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs transition-all duration-150 ${
+                    isSelected
+                      ? 'bg-blue-600 text-white font-bold shadow-md shadow-blue-600/20'
+                      : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 truncate">
+                    <Folder
+                      className="w-3.5 h-3.5 shrink-0"
+                      style={{ color: isSelected ? '#ffffff' : f.color || '#3b82f6' }}
+                    />
+                    <span className="truncate">{f.name}</span>
+                  </div>
+                  <span className={`text-[10px] font-semibold px-1.5 py-0.2 rounded-full ${
+                    isSelected ? 'bg-white/20 text-white' : 'opacity-60'
+                  }`}>
+                    {notes.filter((n: Note) => n.folderId === f.id && !n.isTrash).length}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -255,10 +281,10 @@ export const NotesPage: React.FC = () => {
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-                  className={`px-2 py-0.5 rounded-lg text-[11px] transition ${
+                  className={`px-2.5 py-1 rounded-xl text-[11px] transition-all duration-150 ${
                     selectedTag === tag
-                      ? 'bg-primary text-primary-foreground font-bold'
-                      : 'bg-secondary/60 text-muted-foreground hover:text-foreground'
+                      ? 'bg-indigo-600 text-white font-bold shadow-md shadow-indigo-600/20 ring-1 ring-indigo-400'
+                      : 'bg-secondary/70 text-muted-foreground hover:text-foreground hover:bg-secondary'
                   }`}
                 >
                   #{tag}
@@ -333,47 +359,59 @@ export const NotesPage: React.FC = () => {
               <p>Chưa có ghi chú nào</p>
             </div>
           ) : (
-            filteredNotes.map((note: Note) => (
-              <div
-                key={note.id}
-                onClick={() => {
-                  setActiveNoteId(note.id);
-                  setMobilePane('editor');
-                }}
-                className={`p-3 rounded-2xl cursor-pointer transition relative group border ${
-                  activeNoteId === note.id
-                    ? 'bg-secondary border-primary/40 shadow-sm'
-                    : 'bg-card/60 border-transparent hover:bg-secondary/40'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-1 mb-1">
-                  <h3 className="font-semibold text-xs text-foreground truncate flex-1">
-                    {note.title || 'Ghi chú không tên'}
-                  </h3>
-                  <div className="flex items-center space-x-1 shrink-0">
-                    {note.isPinned && <Pin className="w-3 h-3 text-primary fill-primary" />}
-                    {note.isFavorite && <Star className="w-3 h-3 text-amber-400 fill-amber-400" />}
+            filteredNotes.map((note: Note) => {
+              const isSelected = activeNoteId === note.id;
+              return (
+                <div
+                  key={note.id}
+                  onClick={() => {
+                    setActiveNoteId(note.id);
+                    setMobilePane('editor');
+                  }}
+                  className={`p-3.5 rounded-2xl cursor-pointer transition-all duration-200 relative group border ${
+                    isSelected
+                      ? 'bg-primary/15 border-primary shadow-md ring-2 ring-primary/40'
+                      : 'bg-card/60 border-border/50 hover:bg-secondary/60 hover:border-border'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-1 mb-1">
+                    <h3
+                      className={`font-semibold text-xs truncate flex-1 transition ${
+                        isSelected ? 'text-primary font-bold' : 'text-foreground'
+                      }`}
+                    >
+                      {note.title || 'Ghi chú không tên'}
+                    </h3>
+                    <div className="flex items-center space-x-1 shrink-0">
+                      {note.isPinned && <Pin className="w-3 h-3 text-primary fill-primary" />}
+                      {note.isFavorite && <Star className="w-3 h-3 text-amber-400 fill-amber-400" />}
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
+                    {note.content.replace(/[#*`_]/g, '') || 'Chưa có nội dung...'}
+                  </p>
+
+                  <div className="flex items-center justify-between mt-2.5 pt-1 border-t border-border/30 text-[10px] text-muted-foreground">
+                    <span>{new Date(note.updatedAt).toLocaleDateString('vi-VN')}</span>
+                    {note.tags.length > 0 && (
+                      <div className="flex items-center space-x-1">
+                        {note.tags.slice(0, 2).map((t: string) => (
+                          <span
+                            key={t}
+                            className={`px-1.5 py-0.5 rounded-md font-medium ${
+                              isSelected ? 'bg-primary/25 text-primary font-bold' : 'bg-secondary text-muted-foreground'
+                            }`}
+                          >
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-
-                <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
-                  {note.content.replace(/[#*`_]/g, '') || 'Chưa có nội dung...'}
-                </p>
-
-                <div className="flex items-center justify-between mt-2 pt-1 text-[10px] text-muted-foreground">
-                  <span>{new Date(note.updatedAt).toLocaleDateString('vi-VN')}</span>
-                  {note.tags.length > 0 && (
-                    <div className="flex items-center space-x-1">
-                      {note.tags.slice(0, 2).map((t: string) => (
-                        <span key={t} className="px-1.5 py-0.2 rounded bg-secondary text-primary font-medium">
-                          #{t}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>

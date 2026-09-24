@@ -181,9 +181,9 @@ export const QuickCreateModal: React.FC = () => {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setActiveTab('note')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition ${
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'note'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
               }`}
             >
@@ -192,9 +192,9 @@ export const QuickCreateModal: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('task')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition ${
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'task'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/25 scale-[1.02]'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
               }`}
             >
@@ -203,9 +203,9 @@ export const QuickCreateModal: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('alarm')}
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition ${
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'alarm'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  ? 'bg-red-600 text-white shadow-md shadow-red-600/25 scale-[1.02]'
                   : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
               }`}
             >
@@ -462,10 +462,10 @@ export const QuickCreateModal: React.FC = () => {
                       type="button"
                       key={r.id}
                       onClick={() => setAlarmRepeatType(r.id as RepeatType)}
-                      className={`py-1.5 px-2 rounded-xl font-medium transition ${
+                      className={`py-1.5 px-2 rounded-xl font-medium transition-all duration-150 ${
                         alarmRepeatType === r.id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-secondary/40 text-muted-foreground hover:bg-secondary'
+                          ? 'bg-red-600 text-white font-bold shadow-md shadow-red-600/20'
+                          : 'bg-secondary/40 text-muted-foreground hover:bg-secondary hover:text-foreground'
                       }`}
                     >
                       {r.label}
@@ -483,10 +483,10 @@ export const QuickCreateModal: React.FC = () => {
                           type="button"
                           key={day}
                           onClick={() => toggleDay(day)}
-                          className={`w-8 h-8 rounded-full text-xs font-bold transition ${
+                          className={`w-8 h-8 rounded-full text-xs font-bold transition-all duration-150 ${
                             isSelected
-                              ? 'bg-primary text-primary-foreground shadow-sm'
-                              : 'text-muted-foreground hover:bg-secondary'
+                              ? 'bg-red-600 text-white shadow-md shadow-red-600/25 scale-105'
+                              : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                           }`}
                         >
                           {label}
